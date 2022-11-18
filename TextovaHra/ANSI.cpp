@@ -138,3 +138,8 @@ void eraseLine(unsigned int mode) {
 void scrollMargins(unsigned int top, unsigned int bottom) {
 	printf_s("\x1b[%u;%ur", top, bottom);
 }
+
+void alternateBuffer(bool alternate) {
+	if (alternate) printf_s("\x1b[?1049h");
+	else printf_s("\x1b[?1049l");
+}

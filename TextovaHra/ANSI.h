@@ -26,6 +26,7 @@ void scrollUp(int rows);
 void scrollDown(int rows);
 void eraseViewport(unsigned int mode);
 void scrollMargins(unsigned int top, unsigned int bottom);
+void alternateBuffer(bool alternate);
 
 //text
 void insertCharacter(unsigned int count);
