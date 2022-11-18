@@ -2,47 +2,24 @@
 //
 
 #include <iostream>
+#include "GameName.h"
 #include "ANSI.h"
 
 using namespace std;
 
 int main()
 {
-	//setup console 80 x 20 characters
-	if (setupConsole(80, 20)) return -1;
+	setup("GameName", 80, 30);
+	printIntro();
+	printMenu(4, "Nova hra", "Nacist hru", "Nastaveni", "Konec");
 
-	//set window title
-	setWindowTitle("GameName");
-	
-	//changing colors
-	setColor(FOREGROUND, BLUE);
-	setColor(BRIGHT_BACKGROUND, YELLOW);
-	
-	//set text style
-	setStyle(2, BOLD, UNDERLINE);
+	//switch na menu
 
-	//save and restore cursor position
-	saveCursorPosisiton();
-	restoreCursorPosition();
+	if (restoreConsole()) {
+		errorMessage("chyba pri zavirani konzole");
+		return -1;
+	}
 
-	//relative cursor position
-	relativeCursorPosition(10, -3);
-
-	//absolute cursor position
-	absoluteCursorPosition(15, 17);
-	absoluteCursorPosition(0, 19);
-
-	//change cursor shape
-	shapeCursor(BLOCK);
-
-	//blink or hide cursor
-	blinkCursor(1);
-	hideCursor(0);
-
-	//scroll margins
-	scrollMargins(5, 20);
-
-	if (restoreConsole()) return -1;
 	getchar();
 	return 0;
 }

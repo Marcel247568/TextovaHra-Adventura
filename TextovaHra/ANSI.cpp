@@ -62,7 +62,7 @@ void setStyle(unsigned int count, ...) {
 
 void setWindowTitle(const char* title) {
 	printf_s("\x1b]0;");
-	for (int c = 0; title[c] != '\0'; c++) printf_s("%c", title[c]);
+	for (unsigned int c = 0; title[c] != '\0'; c++) printf_s("%c", title[c]);
 	printf_s("\x07");
 }
 
