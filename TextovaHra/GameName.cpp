@@ -25,10 +25,6 @@ void setup(const char* name, unsigned int columns, unsigned int rows) {
 	setWindowTitle(name);
 }
 
-void printIntro() {
-	//zde bu vytsiknuti uvodni obrazovky s logem hry ctenem ze souboru
-}
-
 void printMenu(unsigned int count, ...) {
 	va_list choices;
 	va_start(choices, count);
