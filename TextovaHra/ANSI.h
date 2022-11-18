@@ -6,7 +6,7 @@
 //console properties
 int setupConsole(unsigned int columns, unsigned int rows);
 int restoreConsole();
-void setWindowTitle(char* title);
+void setWindowTitle(const char* title);
 
 //colors, styles, ...
 void setColor(unsigned int FBground, unsigned int color);

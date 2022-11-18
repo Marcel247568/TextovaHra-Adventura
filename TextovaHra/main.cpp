@@ -12,8 +12,7 @@ int main()
 	if (setupConsole(80, 20)) return -1;
 
 	//set window title
-	char title[] = "TextGame";
-	setWindowTitle(title);
+	setWindowTitle("GameName");
 	
 	//changing colors
 	setColor(FOREGROUND, BLUE);
