@@ -10,10 +10,16 @@ using namespace std;
 int main()
 {
 	setup("GameName", 90, 30);
-
+	
 	printMenu(4, "Nova hra", "Nacist hru", "Nastaveni", "Konec");
+	
 	unsigned int choice;
+
+	printInputBox();
 	scanf_s("%u", &choice);
+	printInputBox();
+	
+	//while (getchar() != '\n');
 	
 	switch (choice) {
 		case 1:
@@ -31,7 +37,6 @@ int main()
 		default:
 			//zde bude funkce rychlou zprávu v textovém poli
 			;
-
 	}
 
 	if (restoreConsole()) {
