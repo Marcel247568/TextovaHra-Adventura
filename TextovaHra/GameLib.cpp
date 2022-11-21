@@ -1,7 +1,8 @@
-#include "GameName.h"
+#include "GameLib.h"
 #include "ANSI.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 static unsigned int COLUMNS;
 static unsigned int ROWS;
@@ -12,6 +13,14 @@ void errorMessage(const char* message) {
 	printf_s("\nERROR: ");
 	setColor(FOREGROUND, DEFAULT_COLOR);
 	for (int c = 0; message[c] != '\0'; c++) printf_s("%c", message[c]);
+}
+
+void quickMessage(const char* message) {
+	setColor(BRIGHT_FOREGROUND, RED);
+	for (int c = 0; message[c] != '\0'; c++) printf_s("%c", message[c]);
+	setColor(FOREGROUND, BLACK);
+	getchar();
+	printInputBox();
 }
 
 void setup(const char* name, unsigned int columns, unsigned int rows) {
@@ -50,4 +59,44 @@ void printInputBox() {
 	setColor(FOREGROUND, BLACK);
 	absoluteCursorPosition(2, ROWS);
 	blinkCursor(1);
+}
+
+bool boolAnswer() {
+	input:
+	char answer[5];
+	scanf_s("%s", answer, sizeof(answer));
+	while (getchar() != '\n');
+	if (!strcmp(answer, "YES") || !strcmp(answer, "yes") || !strcmp(answer, "y") || !strcmp(answer, "Y") || !strcmp(answer, "1")) {
+		printInputBox();
+		return 1;
+	}
+
+	else if (!strcmp(answer, "NO") || !strcmp(answer, "no") || !strcmp(answer, "n") || !strcmp(answer, "N") || !strcmp(answer, "0")) {
+		printInputBox();
+		return 0;
+	}
+
+	else {
+		printInputBox();
+		quickMessage("Zadejte platny vstup");
+		goto input;
+	}
+}
+
+unsigned int numAnswer(unsigned int from, unsigned int to) {
+	input:
+	unsigned int answer;
+	scanf_s("%u", &answer);
+	while (getchar() != '\n');
+	if (answer >= from && answer <= to) {
+		printInputBox();
+		return answer;
+	}
+
+	else {
+		printInputBox();
+		quickMessage("Zadejte platny vstup");
+		goto input;
+	}
+
 }

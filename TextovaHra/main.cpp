@@ -2,24 +2,20 @@
 //
 
 #include <iostream>
-#include "GameName.h"
+#include "GameLib.h"
 #include "ANSI.h"
 
 using namespace std;
 
 int main()
 {
-	setup("GameName", 90, 30);
+	setup("GameName", 100, 30);
 	
 	printMenu(4, "Nova hra", "Nacist hru", "Nastaveni", "Konec");
 	
 	unsigned int choice;
-
 	printInputBox();
-	scanf_s("%u", &choice);
-	printInputBox();
-	
-	//while (getchar() != '\n');
+	choice = numAnswer(1, 4);
 	
 	switch (choice) {
 		case 1:
@@ -34,16 +30,12 @@ int main()
 		case 4:
 			//zde bude funkce pro ukonceni hry
 			break;
-		default:
-			//zde bude funkce rychlou zprávu v textovém poli
-			;
 	}
 
 	if (restoreConsole()) {
 		errorMessage("chyba pri zavirani konzole");
 		return -1;
 	}
-
 	getchar();
 	return 0;
 }
