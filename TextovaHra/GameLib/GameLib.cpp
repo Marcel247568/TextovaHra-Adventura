@@ -8,16 +8,18 @@ static unsigned int COLUMNS;
 static unsigned int ROWS;
 
 void errorMessage(const char* message) {
-	setStyle(1, DEFAULT_STYLE);
+	clearScreen();
+	scrollMargins(1, ROWS);
 	setColor(BRIGHT_FOREGROUND, RED);
 	printf_s("\nERROR: ");
 	setColor(FOREGROUND, DEFAULT_COLOR);
-	for (int c = 0; message[c] != '\0'; c++) printf_s("%c", message[c]);
+	printf_s("%s", message);
+	exit(-1);
 }
 
 void quickMessage(const char* message) {
 	setColor(BRIGHT_FOREGROUND, RED);
-	for (int c = 0; message[c] != '\0'; c++) printf_s("%c", message[c]);
+	printf_s("%s", message);
 	setColor(FOREGROUND, BLACK);
 	getchar();
 	printInputBox();
@@ -26,8 +28,9 @@ void quickMessage(const char* message) {
 void staticMessage(const char* message) {
 	setColor(BRIGHT_FOREGROUND, WHITE);
 	setColor(BACKGROUND, BLACK);
+	deleteLine(7);
 	absoluteCursorPosition(2, ROWS - 9);
-	for (int c = 0; message[c] != '\0'; c++) printf_s("%c", message[c]);
+	printf_s("%s", message);
 }
 
 void setup(const char* name, unsigned int columns, unsigned int rows) {
@@ -35,7 +38,6 @@ void setup(const char* name, unsigned int columns, unsigned int rows) {
 	ROWS = rows;
 	if (setupConsole(columns, rows)) {
 		errorMessage("chyba pri nastavovani konzole");
-		exit(-1);
 	}
 	alternateBuffer(1);
 	setWindowTitle(name);
@@ -46,7 +48,6 @@ void setup(const char* name, unsigned int columns, unsigned int rows) {
 void close() {
 	if (restoreConsole()) {
 		errorMessage("chyba pri zavirani konzole");
-		exit(-1);
 	}
 	scrollMargins(1, ROWS);
 	exit(0);
@@ -60,9 +61,10 @@ void printMenu(unsigned int count, ...) {
 		absoluteCursorPosition((COLUMNS / 2) - 7, 3 * (ROWS / 5) + n);
 		choice = va_arg(choices, const char*);
 		printf("%u: ", n+1);
-		for (unsigned int c = 0; choice[c] != '\0'; c++) printf_s("%c", choice[c]);
+		printf_s("%s", choice);
 	}
 	va_end(choices);
+	printInputBox();
 }
 
 void printInputBox() {
@@ -119,4 +121,21 @@ unsigned int numAnswer(unsigned int from, unsigned int to) {
 void clearScreen() {
 	setColor(BACKGROUND, BLACK);
 	eraseViewport(ALL);
+}
+
+void printMap() {
+	absoluteCursorPosition(COLUMNS / 5 + 1, 1);
+	setColor(BACKGROUND, BLACK);
+	setColor(BRIGHT_FOREGROUND, WHITE);
+
+	char line[100];
+	FILE* fmap;
+	if (fopen_s(&fmap, "../../../data/map.dat", "r")) errorMessage("soubor map.dat se nepodarilo otevrit");
+	
+	while (!feof(fmap)) {
+		fscanf_s(fmap, "#%[^\n]\n", line, sizeof(line));
+		printf_s("%s\n", line);
+		relativeCursorPosition(COLUMNS / 5 + 1, 0);
+	}
+	fclose(fmap);
 }
