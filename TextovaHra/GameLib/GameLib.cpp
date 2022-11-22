@@ -128,14 +128,16 @@ void printMap() {
 	setColor(BACKGROUND, BLACK);
 	setColor(BRIGHT_FOREGROUND, WHITE);
 
-	char line[255];
+	char* line;
+	line = (char*)malloc(255 * sizeof(char));
 	FILE* fmap;
 	if (fopen_s(&fmap, "../../../data/map.dat", "r")) errorMessage("soubor map.dat se nepodarilo otevrit");
 	
 	while (!feof(fmap)) {
-		fscanf_s(fmap, "#%[^\n]\n", line, sizeof(line));
+		fscanf_s(fmap, "#%[^\n]\n", line, 255 * sizeof(char));
 		printf_s("%s\n", line);
 		relativeCursorPosition(COLUMNS / 5 + 1, 0);
 	}
 	fclose(fmap);
+	free(line);
 }
