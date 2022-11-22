@@ -128,7 +128,7 @@ void printMap() {
 	setColor(BACKGROUND, BLACK);
 	setColor(BRIGHT_FOREGROUND, WHITE);
 
-	char line[100];
+	char line[255];
 	FILE* fmap;
 	if (fopen_s(&fmap, "../../../data/map.dat", "r")) errorMessage("soubor map.dat se nepodarilo otevrit");
 	

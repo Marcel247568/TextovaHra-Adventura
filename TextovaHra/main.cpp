@@ -27,6 +27,7 @@ int main()
 			staticMessage("Zadejte jmeno sve postavy");
 			printInputBox();
 			scanf_s("%14s", &player.name, 15);
+			while (getchar() != '\n');
 			printInputBox();
 			
 			if (fopen_s(&fplayer, "../../../data/player.dat", "wb")) errorMessage("soubor player.dat se nepodarilo otevrit");
@@ -46,9 +47,8 @@ int main()
 	}
 
 	clearScreen();
-	printInputBox();
 	printMap();
-	
+	printInputBox();
 
 	while (1) {
 		
