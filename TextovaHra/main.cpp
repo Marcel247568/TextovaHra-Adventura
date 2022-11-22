@@ -2,40 +2,56 @@
 //
 
 #include <iostream>
-#include "GameLib.h"
-#include "ANSI.h"
+#include "GameLib/GameLib.h"
+#include "GameLib/ANSI/ANSI.h"
 
 using namespace std;
 
 int main()
 {
 	setup("GameName", 100, 30);
+
+	struct playerData {
+		char cosi[13];
+		char name[15];
+	}player;
 	
-	printMenu(4, "Nova hra", "Nacist hru", "Nastaveni", "Konec");
-	
+	clearScreen();
+	printMenu(3, "Nova hra", "Nacist hru", "Konec");
 	unsigned int choice;
 	printInputBox();
-	choice = numAnswer(1, 4);
+	choice = numAnswer(1, 3);
+	clearScreen();
 	
+	FILE* fplayer;
 	switch (choice) {
 		case 1:
-			//zde bude funkce pro novou hru
+			staticMessage("Zadejte jmeno sve postavy:");
+			scanf_s("%14s", &player.name, 15);
+			if (fopen_s(&fplayer, "C:\\MyFiles\\School\\BPC-PC1T\\SemestralProject\\TextovaHra\\player.dat", "ab")) {
+				errorMessage("soubor player.dat se nepodarilo otevrit");
+				exit(-1);
+			}
+			fwrite(&player, sizeof(struct playerData), 1, fplayer);
+			fclose(fplayer);
 			break;
 		case 2:
-			//zde bude funkce pro nacteni hry
+			if (fopen_s(&fplayer, "C:\\MyFiles\\School\\BPC-PC1T\\SemestralProject\\TextovaHra\\player.dat", "rb")) {
+				errorMessage("soubor player.dat se nepodarilo otevrit");
+				exit(-1);
+			}
+			fread_s(&player, sizeof(struct playerData), sizeof(struct playerData), 1, fplayer);
 			break;
 		case 3:
-			//zde bude funkce pro nastaveni
-			break;
-		case 4:
-			//zde bude funkce pro ukonceni hry
+			close();
 			break;
 	}
 
-	if (restoreConsole()) {
-		errorMessage("chyba pri zavirani konzole");
-		return -1;
+	while (1) {
+
 	}
+
+	close();
 	getchar();
 	return 0;
 }

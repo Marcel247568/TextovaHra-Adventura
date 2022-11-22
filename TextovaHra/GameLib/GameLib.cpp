@@ -1,5 +1,5 @@
 #include "GameLib.h"
-#include "ANSI.h"
+#include "ANSI/ANSI.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,6 +23,13 @@ void quickMessage(const char* message) {
 	printInputBox();
 }
 
+void staticMessage(const char* message) {
+	setColor(BRIGHT_FOREGROUND, WHITE);
+	setColor(BACKGROUND, BLACK);
+	absoluteCursorPosition(2, ROWS - 9);
+	for (int c = 0; message[c] != '\0'; c++) printf_s("%c", message[c]);
+}
+
 void setup(const char* name, unsigned int columns, unsigned int rows) {
 	COLUMNS = columns;
 	ROWS = rows;
@@ -34,6 +41,15 @@ void setup(const char* name, unsigned int columns, unsigned int rows) {
 	setWindowTitle(name);
 	shapeCursor(BLOCK);
 	scrollMargins(ROWS - 1, ROWS);
+}
+
+void close() {
+	if (restoreConsole()) {
+		errorMessage("chyba pri zavirani konzole");
+		exit(-1);
+	}
+	scrollMargins(1, ROWS);
+	exit(0);
 }
 
 void printMenu(unsigned int count, ...) {
@@ -64,7 +80,7 @@ void printInputBox() {
 bool boolAnswer() {
 	input:
 	char answer[5];
-	scanf_s("%s", answer, sizeof(answer));
+	scanf_s("%s", answer, (unsigned int)sizeof(answer));
 	while (getchar() != '\n');
 	if (!strcmp(answer, "YES") || !strcmp(answer, "yes") || !strcmp(answer, "y") || !strcmp(answer, "Y") || !strcmp(answer, "1")) {
 		printInputBox();
@@ -98,5 +114,9 @@ unsigned int numAnswer(unsigned int from, unsigned int to) {
 		quickMessage("Zadejte platny vstup");
 		goto input;
 	}
+}
 
+void clearScreen() {
+	setColor(BACKGROUND, BLACK);
+	eraseViewport(ALL);
 }
