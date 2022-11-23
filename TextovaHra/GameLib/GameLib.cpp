@@ -123,19 +123,18 @@ void clearScreen() {
 	eraseViewport(ALL);
 }
 
-void printMap() {
-	absoluteCursorPosition(COLUMNS / 5 + 1, 1);
+void printFile(const char* file, unsigned int column, unsigned int row) {
+	absoluteCursorPosition(column, row);
 	setColor(BACKGROUND, BLACK);
 	setColor(BRIGHT_FOREGROUND, WHITE);
 
 	char line[255];
 	FILE* fmap;
-	if (fopen_s(&fmap, "../../../data/map.dat", "r")) errorMessage("soubor map.dat se nepodarilo otevrit");
-	
+	if (fopen_s(&fmap, file, "r")) errorMessage("soubor map.dat se nepodarilo otevrit");
 	while (!feof(fmap)) {
 		fscanf_s(fmap, "#%[^\n]\n", line, sizeof(line));
 		printf_s("%s\n", line);
-		relativeCursorPosition(COLUMNS / 5 + 1, 0);
+		relativeCursorPosition(column, 0);
 	}
 	fclose(fmap);
 }

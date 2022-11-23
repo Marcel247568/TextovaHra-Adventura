@@ -13,4 +13,4 @@ void printInputBox();
 bool boolAnswer();
 unsigned int numAnswer(unsigned int from, unsigned int to);
 void clearScreen();
-void printMap();
+void printFile(const char* file, unsigned int columns, unsigned int rows);

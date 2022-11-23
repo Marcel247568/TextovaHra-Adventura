@@ -47,7 +47,7 @@ int main()
 	}
 
 	clearScreen();
-	printMap();
+	printFile("../../../data/map.dat", 20, 1);
 	printInputBox();
 
 	while (1) {
