@@ -53,12 +53,12 @@ void close() {
 	exit(0);
 }
 
-void printMenu(unsigned int count, ...) {
+void printMenu(unsigned int column, unsigned int row, unsigned int count, ...) {
 	va_list choices;
 	va_start(choices, count);
 	const char* choice;
 	for (unsigned int n = 0; n < count; n++) {
-		absoluteCursorPosition((COLUMNS / 2) - 7, 3 * (ROWS / 5) + n);
+		absoluteCursorPosition(column, row + n);
 		choice = va_arg(choices, const char*);
 		printf("%u: ", n+1);
 		printf_s("%s", choice);

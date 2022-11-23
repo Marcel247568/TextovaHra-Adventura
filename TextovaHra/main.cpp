@@ -16,7 +16,7 @@ int main()
 	}player;
 	
 	clearScreen();
-	printMenu(3, "Nova hra", "Nacist hru", "Konec");
+	printMenu(43, 18, 3, "Nova hra", "Nacist hru", "Konec");
 	unsigned int choice;
 	choice = numAnswer(1, 3);
 	clearScreen();
