@@ -18,16 +18,18 @@ int main()
 		char name[15];
 	}player;
 
-	setup("GameName", 116, 30);
+	setup("Destination Unknown", 100, 30);
 	
 	clearScreen();
 
-	printArtFile(nameFile, 1, 3);
+	printArtFile(nameFile, 8, 3);
 
-	printMenu(43, 18, 3, "Nova hra", "Nacist hru", "Konec");
+	printMenu(43, 20, 3, "Nova hra", "Nacist hru", "Konec");
 	unsigned int choice;
 	choice = numAnswer(1, 3);
-	clearScreen();
+	absoluteCursorPosition(43, 20);
+	setColor(BACKGROUND, BLACK);
+	eraseViewport(CURSOR_TO_END);
 	
 	FILE* fplayer;
 	switch (choice) {
