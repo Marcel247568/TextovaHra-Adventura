@@ -13,4 +13,5 @@ void printInputBox();
 bool boolAnswer();
 unsigned int numAnswer(unsigned int from, unsigned int to);
 void clearScreen();
-void printFile(const char* file, unsigned int columns, unsigned int rows);
+void printArtFile(const char* file, unsigned int column, unsigned int row);
+void printTextFile(const char* file, unsigned int column, unsigned int row);

@@ -9,11 +9,15 @@ using namespace std;
 
 int main()
 {
-	setup("GameName", 100, 30);
+	const char* playerFile = "../../../data/player.dat";
+	const char* mapFile = "../../../data/map.dat";
+	const char* textFile = "../../../data/text.dat";
 
 	struct playerData {
 		char name[15];
 	}player;
+
+	setup("GameName", 100, 30);
 	
 	clearScreen();
 	printMenu(43, 18, 3, "Nova hra", "Nacist hru", "Konec");
@@ -30,13 +34,13 @@ int main()
 			while (getchar() != '\n');
 			printInputBox();
 			
-			if (fopen_s(&fplayer, "../../../data/player.dat", "wb")) errorMessage("soubor player.dat se nepodarilo otevrit");
+			if (fopen_s(&fplayer, playerFile, "wb")) errorMessage("soubor player.dat se nepodarilo otevrit");
 			fwrite(&player, sizeof(struct playerData), 1, fplayer);
 			fclose(fplayer);
 			break;
 
 		case 2:
-			if (fopen_s(&fplayer, "../../../data/player.dat", "rb")) errorMessage("soubor player.dat se nepodarilo otevrit");
+			if (fopen_s(&fplayer, playerFile, "rb")) errorMessage("soubor player.dat se nepodarilo otevrit");
 			fread_s(&player, sizeof(struct playerData), sizeof(struct playerData), 1, fplayer);
 			fclose(fplayer);
 			break;
@@ -47,8 +51,9 @@ int main()
 	}
 
 	clearScreen();
-	printFile("../../../data/map.dat", 20, 1);
+	printArtFile(mapFile, 20, 1);
 	printInputBox();
+	printTextFile(textFile, 2, 20);
 
 	while (1) {
 		

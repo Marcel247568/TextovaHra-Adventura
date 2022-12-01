@@ -10,14 +10,16 @@ static unsigned int ROWS;
 void errorMessage(const char* message) {
 	clearScreen();
 	scrollMargins(1, ROWS);
+	setColor(BACKGROUND, BLACK);
 	setColor(BRIGHT_FOREGROUND, RED);
 	printf_s("\nERROR: ");
-	setColor(FOREGROUND, DEFAULT_COLOR);
+	setColor(FOREGROUND, WHITE);
 	printf_s("%s", message);
 	exit(-1);
 }
 
 void quickMessage(const char* message) {
+	setColor(BRIGHT_BACKGROUND, WHITE);
 	setColor(BRIGHT_FOREGROUND, RED);
 	printf_s("%s", message);
 	setColor(FOREGROUND, BLACK);
@@ -26,8 +28,8 @@ void quickMessage(const char* message) {
 }
 
 void staticMessage(const char* message) {
-	setColor(BRIGHT_FOREGROUND, WHITE);
 	setColor(BACKGROUND, BLACK);
+	setColor(BRIGHT_FOREGROUND, WHITE);
 	deleteLine(7);
 	absoluteCursorPosition(2, ROWS - 9);
 	printf_s("%s", message);
@@ -54,6 +56,8 @@ void close() {
 }
 
 void printMenu(unsigned int column, unsigned int row, unsigned int count, ...) {
+	setColor(BACKGROUND, BLACK);
+	setColor(BRIGHT_FOREGROUND, WHITE);
 	va_list choices;
 	va_start(choices, count);
 	const char* choice;
@@ -123,18 +127,38 @@ void clearScreen() {
 	eraseViewport(ALL);
 }
 
-void printFile(const char* file, unsigned int column, unsigned int row) {
-	absoluteCursorPosition(column, row);
+void printArtFile(const char* file, unsigned int column, unsigned int row) {
 	setColor(BACKGROUND, BLACK);
 	setColor(BRIGHT_FOREGROUND, WHITE);
+	absoluteCursorPosition(column, row);
 
-	char line[255];
-	FILE* fmap;
-	if (fopen_s(&fmap, file, "r")) errorMessage("soubor map.dat se nepodarilo otevrit");
-	while (!feof(fmap)) {
-		fscanf_s(fmap, "#%[^\n]\n", line, sizeof(line));
+	char* line;
+	line = (char*)malloc(255 * sizeof(char));
+	FILE* fG;
+	if (fopen_s(&fG, file, "r")) errorMessage("soubor s grafickym obsahem se nepodarilo otevrit");
+	while (!feof(fG)) {
+		fscanf_s(fG, "#%[^\n]\n", line, (unsigned int)(255 * sizeof(char)));
 		printf_s("%s\n", line);
-		relativeCursorPosition(column, 0);
+		absoluteCursorPosition(column, 0);
 	}
-	fclose(fmap);
+	fclose(fG);
+	free(line);
+}
+
+void printTextFile(const char* file, unsigned int column, unsigned int row) {
+	setColor(BACKGROUND, BLACK);
+	setColor(BRIGHT_FOREGROUND, WHITE);
+	absoluteCursorPosition(column, row);
+
+	char* text;
+	text = (char*)malloc(255 * sizeof(char));
+	FILE* fT;
+	if (fopen_s(&fT, file, "r")) errorMessage("soubor s textovym obsahem se nepodarilo otevrit");
+	while (!feof(fT)) {
+		fscanf_s(fT, "%[^\n]\n", text, (unsigned int)(255 * sizeof(char)));
+		printf_s("%s\n", text);
+		absoluteCursorPosition(column, 0);
+	}
+	fclose(fT);
+	free(text);
 }
