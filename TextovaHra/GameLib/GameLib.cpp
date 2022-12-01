@@ -88,12 +88,12 @@ bool boolAnswer() {
 	char answer[5];
 	scanf_s("%s", answer, (unsigned int)sizeof(answer));
 	while (getchar() != '\n');
-	if (!strcmp(answer, "YES") || !strcmp(answer, "yes") || !strcmp(answer, "y") || !strcmp(answer, "Y") || !strcmp(answer, "1")) {
+	if (!strcmp(answer, "A") || !strcmp(answer, "Y")) {
 		printInputBox();
 		return 1;
 	}
 
-	else if (!strcmp(answer, "NO") || !strcmp(answer, "no") || !strcmp(answer, "n") || !strcmp(answer, "N") || !strcmp(answer, "0")) {
+	else if (!strcmp(answer, "N")) {
 		printInputBox();
 		return 0;
 	}
@@ -137,7 +137,7 @@ void printArtFile(const char* file, unsigned int column, unsigned int row) {
 	FILE* fG;
 	if (fopen_s(&fG, file, "r")) errorMessage("soubor s grafickym obsahem se nepodarilo otevrit");
 	while (!feof(fG)) {
-		fscanf_s(fG, "#%[^\n]\n", line, (unsigned int)(255 * sizeof(char)));
+		fscanf_s(fG, "$%[^\n]\n", line, (unsigned int)(255 * sizeof(char)));
 		printf_s("%s\n", line);
 		absoluteCursorPosition(column, 0);
 	}
@@ -145,20 +145,22 @@ void printArtFile(const char* file, unsigned int column, unsigned int row) {
 	free(line);
 }
 
-void printTextFile(const char* file, unsigned int column, unsigned int row) {
+void printTextFile(const char* file, unsigned int part, unsigned int row) {
 	setColor(BACKGROUND, BLACK);
 	setColor(BRIGHT_FOREGROUND, WHITE);
-	absoluteCursorPosition(column, row);
+	absoluteCursorPosition(1, row);
 
+	unsigned int textCounter = 1;
 	char* text;
 	text = (char*)malloc(255 * sizeof(char));
 	FILE* fT;
 	if (fopen_s(&fT, file, "r")) errorMessage("soubor s textovym obsahem se nepodarilo otevrit");
-	while (!feof(fT)) {
-		fscanf_s(fT, "%[^\n]\n", text, (unsigned int)(255 * sizeof(char)));
-		printf_s("%s\n", text);
-		absoluteCursorPosition(column, 0);
+	while (textCounter <= part && !feof(fT)) {
+		fscanf_s(fT, "$%[^$]$\n", text, (unsigned int)(255 * sizeof(char)));
+		textCounter++;
 	}
+	printf_s("%s\n", text);
+
 	fclose(fT);
 	free(text);
 }

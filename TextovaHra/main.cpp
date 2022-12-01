@@ -53,8 +53,6 @@ int main()
 	clearScreen();
 	printArtFile(mapFile, 20, 1);
 	printInputBox();
-	printTextFile(textFile, 2, 20);
-
 	while (1) {
 		
 	}

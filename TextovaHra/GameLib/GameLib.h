@@ -14,4 +14,4 @@ bool boolAnswer();
 unsigned int numAnswer(unsigned int from, unsigned int to);
 void clearScreen();
 void printArtFile(const char* file, unsigned int column, unsigned int row);
-void printTextFile(const char* file, unsigned int column, unsigned int row);
+void printTextFile(const char* file, unsigned int part, unsigned int row);
