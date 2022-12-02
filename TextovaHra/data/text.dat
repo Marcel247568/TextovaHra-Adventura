@@ -1,16 +1,22 @@
-1$Zadejte jmeno sve postavy$
+1$Zadejte jmeno sve postavy:$
 2$Pise se rok 2168 a pracujete jako agent intergalakticke policie.
 Povedlo se vam dopadnout vezne, ktery uprchl z meziplanetarniho vezeni.
 Vasim ukolem bylo tohoto vezne dopravit zpatky do vezeni, aby si odpykal zbytek sveho trestu.$
-3$Po probuzeni z kryospanku vsak zjistujete, ze je vase lod poskozena a mimo planovany kurz.
+3$Po probuzeni z kryospanku vsak zjistujete, ze je vase lod mimo planovany kurz.
 Za zahadnych okolnosti zmizela take cela posadka vasi vesmirne lodi.
 Nemate poneti kde se ted nachazite, ale jedno je jasne, musite se odtud dostat.$
 4$Pokracujte stisknutim klavesy enter$
 5$Hmm, nefunguji svetla, to je divne...
 Asi nefunguje generator. Budu ho muset opravit.
 Musim se dostat do strojovny!$
-6$Sakra, dvere jsou zamcene. Nekde tu snad bude klic.$
-7$Na stole lezi papirek s cisly 8 a 5.$
-8$Skrinka je zamcena. Budes ji muset odemknout.$
-9$Zadejte cislo kombinace.$
-10$Zadali jste spatnou kombinaci!$
+6$Sakra, dvere jsou zamcene a pristupova karta je mi bez elektriny k nicemu.
+Nekde by tu ale snad mel byt klic pro manualni otevreni.$
+7$Na stole lezi papirek s cisly 8 a 5, ale konec papirku je odtrzeny.$
+8$Skrinka je zamcena. Budu ji muset odemknout.$
+9$Zadejte prvni cislici kombinace:$
+10$Zadejte druhou cislici kombinace:$
+11$Zadejte treti cislici kombinace:$
+12$To nebude ono!$
+13$Tady je!
+Ja vedel ze tu ten klic nekde musi byt.
+Ted mohu manualne otevrit dvere.$

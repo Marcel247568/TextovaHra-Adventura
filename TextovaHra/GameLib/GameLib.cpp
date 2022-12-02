@@ -65,8 +65,10 @@ void close() {
 }
 
 void printMenu(unsigned int column, unsigned int row, unsigned int count, ...) {
+	absoluteCursorPosition(1, row);
 	setColor(BACKGROUND, BLACK);
 	setColor(BRIGHT_FOREGROUND, WHITE);
+	eraseViewport(CURSOR_TO_END);
 	va_list choices;
 	va_start(choices, count);
 	const char* choice;
@@ -157,6 +159,8 @@ void printArtFile(const char* file, unsigned int column, unsigned int row) {
 
 void printTextFile(const char* file, unsigned int part, bool instant, unsigned int row) {
 	absoluteCursorPosition(1, row);
+	setColor(BACKGROUND, BLACK);
+	eraseViewport(CURSOR_TO_END);
 
 	unsigned int textPart = 0;
 	char* text;
@@ -176,10 +180,6 @@ void printTextFile(const char* file, unsigned int part, bool instant, unsigned i
 
 	fclose(fT);
 	free(text);
-
-	setColor(BACKGROUND, BLACK);
-	setColor(BRIGHT_FOREGROUND, WHITE);
-	eraseViewport(CURSOR_TO_END);
 }
 
 void saveGame(void* playerData, unsigned int size) {
