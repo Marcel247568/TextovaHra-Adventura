@@ -13,8 +13,11 @@ void printInputBox();
 void printArtFile(const char* file, unsigned int column, unsigned int row);
 void printTextFile(const char* file, unsigned int part, bool instant, unsigned int row);
 
-void mSleep(unsigned int s);
+void uSleep(unsigned int ms);
 bool boolAnswer();
 unsigned int numAnswer(unsigned int from, unsigned int to);
+
+void saveGame(void* playerData, unsigned int size);
+void loadGame(void* playerData, unsigned int size);
 
 void clearScreen();

@@ -13,11 +13,13 @@
 static unsigned int COLUMNS;
 static unsigned int ROWS;
 
-void mSleep(unsigned int s) {
+const char* playerFile = "../../../data/player.dat";
+
+void uSleep(unsigned int ms) {
 	#ifdef _WIN32
-	Sleep(s * 1000);
+	Sleep(ms);
 	#else
-	sleep(s);
+	sleep(ms/1000);
 	#endif
 }
 
@@ -167,7 +169,7 @@ void printTextFile(const char* file, unsigned int part, bool instant, unsigned i
 	else {
 		for (unsigned t = 0; text[t] != '\0'; t++) {
 			printf_s("%c", text[t]);
-			Sleep(10);
+			uSleep(10);
 		}
 		printf_s("\n");
 	}
@@ -178,4 +180,20 @@ void printTextFile(const char* file, unsigned int part, bool instant, unsigned i
 	setColor(BACKGROUND, BLACK);
 	setColor(BRIGHT_FOREGROUND, WHITE);
 	eraseViewport(CURSOR_TO_END);
+}
+
+void saveGame(void* playerData, unsigned int size) {
+	FILE* fplayer;
+
+	if (fopen_s(&fplayer, playerFile, "wb")) errorMessage("soubor player.dat se nepodarilo otevrit");
+	fwrite(playerData, size, 1, fplayer);
+	fclose(fplayer);
+}
+
+void loadGame(void* playerData, unsigned int size) {
+	FILE* fplayer;
+
+	if (fopen_s(&fplayer, playerFile, "rb")) errorMessage("soubor player.dat se nepodarilo otevrit");
+	fread_s(playerData, size, size, 1, fplayer);
+	fclose(fplayer);
 }
