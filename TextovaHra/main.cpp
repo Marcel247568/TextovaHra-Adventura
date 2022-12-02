@@ -60,6 +60,7 @@ int main()
 			break;
 	}
 
+	//uvod do pribehu
 	if (choice == 1) {
 		clearScreen();
 		printTextFile(textFile, 2, 0, 2);
@@ -85,6 +86,7 @@ void cryoRoom(struct playerData* player) {
 	start:
 	printMenu(3, 20, 3, "Odejit", "Podivat se na stul", "Podivat se na skrinku");
 
+	//odchod
 	choice = numAnswer(1, 3);
 	switch (choice) {
 	case 1:
@@ -101,7 +103,8 @@ void cryoRoom(struct playerData* player) {
 			goto start;
 		}
 		break;
-
+	
+	//stul
 	case 2:
 		setColor(BACKGROUND, BLACK);
 		setColor(BRIGHT_FOREGROUND, WHITE);
@@ -109,11 +112,14 @@ void cryoRoom(struct playerData* player) {
 		pressEnter(22);
 		goto start;
 		break;
-
+	
+	//skrinka
 	case 3:
 		setColor(BACKGROUND, BLACK);
 		setColor(BRIGHT_FOREGROUND, WHITE);
 		printTextFile(textFile, 8, 0, 20);
+
+		//zadani kombinace
 		setColor(FOREGROUND, WHITE);
 		printTextFile(textFile, 9, 1, 22);
 		printInputBox();
@@ -126,6 +132,8 @@ void cryoRoom(struct playerData* player) {
 		printTextFile(textFile, 11, 1, 22);
 		printInputBox();
 		third = numAnswer(1, 9);
+
+		//kontrola kombinace
 		if (first == 8 && second == 5 && third == 7) {
 			player->key = 1;
 			saveGame(player, sizeof(struct playerData));
