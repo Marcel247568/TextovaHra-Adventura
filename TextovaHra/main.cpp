@@ -63,10 +63,7 @@ int main()
 		_sleep(7000);
 		printTextFile(textFile, 2, 6);
 		_sleep(10000);
-		setColor(FOREGROUND, GREEN);
 		printf("\nPokracujte stisknutim Enteru");
-		setColor(FOREGROUND, WHITE);
-		printf("\n jojojo");
 		getchar();
 	}
 
