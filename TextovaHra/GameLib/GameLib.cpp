@@ -48,6 +48,7 @@ void setup(const char* name, unsigned int columns, unsigned int rows) {
 }
 
 void close() {
+	clearScreen();
 	if (restoreConsole()) {
 		errorMessage("chyba pri zavirani konzole");
 	}
@@ -149,16 +150,14 @@ void printTextFile(const char* file, unsigned int part, unsigned int row) {
 	setColor(BACKGROUND, BLACK);
 	setColor(BRIGHT_FOREGROUND, WHITE);
 	absoluteCursorPosition(1, row);
+	eraseViewport(CURSOR_TO_END);
 
-	unsigned int textCounter = 1;
+	unsigned int textPart = 0;
 	char* text;
 	text = (char*)malloc(255 * sizeof(char));
 	FILE* fT;
 	if (fopen_s(&fT, file, "r")) errorMessage("soubor s textovym obsahem se nepodarilo otevrit");
-	while (textCounter <= part && !feof(fT)) {
-		fscanf_s(fT, "$%[^$]$\n", text, (unsigned int)(255 * sizeof(char)));
-		textCounter++;
-	}
+	while (textPart < part && !feof(fT)) fscanf_s(fT, "%u$%[^$]$\n", &textPart, text, (unsigned int)(255 * sizeof(char)));
 	printf_s("%s\n", text);
 
 	fclose(fT);
