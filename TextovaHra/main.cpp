@@ -59,14 +59,83 @@ int main()
 		hideCursor(1);
 		setColor(FOREGROUND, WHITE);
 		printTextFile(textFile, 4, 1, 10);
-		getchar();
 		while (getchar() != '\n');
 		hideCursor(0);
 	}
 	
 	clearScreen();
+	printArtFile(mapFile, 20, 1); 
+
+	//Prvni mistnost
+	/*
+	int klic = 0; int prvni; int druhe;
+	setColor(BRIGHT_FOREGROUND, WHITE);
+	printTextFile(textFile, 5, 0, 15);
+	hideCursor(1);
+	setColor(FOREGROUND, WHITE);
+	printTextFile(textFile, 4, 1, 19);
+	while (getchar() != '\n');
+	hideCursor(0);
+
+	input:
+	clearScreen();
 	printArtFile(mapFile, 20, 1);
-	printInputBox();
+	printMenu(1, 15, 3, "Odejit", "Podivat se na stul", "Podivat se na skrinku");
+	
+	choice = numAnswer(1, 3);
+	switch (choice) {
+	case 1:
+		if (klic == 0) {
+			setColor(BACKGROUND, BLACK);
+			setColor(BRIGHT_FOREGROUND, WHITE);
+			printTextFile(textFile, 6, 0, 20);
+			hideCursor(1);
+			setColor(FOREGROUND, WHITE);
+			printTextFile(textFile, 4, 1, 22);
+			while (getchar() != '\n');
+			hideCursor(0);
+			goto input;
+		}
+		break;
+
+	case 2:
+		setColor(BACKGROUND, BLACK);
+		setColor(BRIGHT_FOREGROUND, WHITE);
+		printTextFile(textFile, 7, 0, 20);
+		hideCursor(1);
+		setColor(FOREGROUND, WHITE);
+		printTextFile(textFile, 4, 1, 22);
+		while (getchar() != '\n');
+		hideCursor(0);
+		goto input;
+		break;
+
+	case 3:
+		setColor(BACKGROUND, BLACK);
+		setColor(BRIGHT_FOREGROUND, WHITE);
+		printTextFile(textFile, 8, 0, 20);
+		printTextFile(textFile, 9, 0, 22);
+		scanf_s("%d", &prvni);
+		printTextFile(textFile, 9, 0, 22);
+		scanf_s("%d", &druhe);
+		if (prvni == 8 && druhe == 5) {
+			klic = 1;
+		}
+		else {
+			clearScreen();
+			printArtFile(mapFile, 20, 1);
+			printTextFile(textFile, 10, 1, 20);
+			_sleep(5000);
+			goto input;
+		}
+
+
+		break;
+	}
+	*/
+
+	
+	
 
 	while (1) {
 		
