@@ -56,6 +56,20 @@ int main()
 			break;
 	}
 
+	if (choice == 1)
+	{
+		clearScreen();
+		printTextFile(textFile, 1, 2);
+		_sleep(7000);
+		printTextFile(textFile, 2, 6);
+		_sleep(10000);
+		setColor(FOREGROUND, GREEN);
+		printf("\nPokracujte stisknutim Enteru");
+		setColor(FOREGROUND, WHITE);
+		printf("\n jojojo");
+		getchar();
+	}
+
 	clearScreen();
 	printArtFile(mapFile, 20, 1);
 	printInputBox();
