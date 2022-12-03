@@ -5,12 +5,14 @@
 #include "GameLib/GameLib.h"
 #include "GameLib/ANSI/ANSI.h"
 #include <stdbool.h>
+#include <time.h>
 
 using namespace std;
 
 void gameMenu(struct playerData* player);
 void cryoRoom(struct playerData* player);
 void mechanicalRoom(struct playerData* player);
+void navigationRoom(struct playerData* player);
 void pressEnter(unsigned int row);
 
 const char* textFile = "../../../data/text.dat";
@@ -21,6 +23,8 @@ struct playerData {
 	char name[15];
 	bool key;
 	bool repairedEl;
+	int coordinationsA[3];
+	int coordinationsB[3];
 };
 
 int main()
@@ -36,6 +40,7 @@ int main()
 
 	cryoRoom(&player);
 	mechanicalRoom(&player);
+	navigationRoom(&player);
 
 	close();
 	return 0;
@@ -61,6 +66,10 @@ void gameMenu(struct playerData* player) {
 		printInputBox();
 		player->key = 0;
 		player->repairedEl = 0;
+		for (int s = 0; s < 3; s++) {
+			player->coordinationsA[s] = 0;
+			player->coordinationsB[s] = 0;
+		}
 
 		saveGame(player, sizeof(struct playerData));
 		break;
@@ -96,13 +105,9 @@ void cryoRoom(struct playerData* player) {
 
 	choice = numAnswer(1, 3);
 	switch (choice) {
-	//odchod
+	//odejti do strojovny
 	case 1:
-		if (player->key) {
-			setColor(BACKGROUND, BLACK);
-			setColor(BRIGHT_FOREGROUND, WHITE);
-
-		}
+		if (player->key) return;
 		else {
 			setColor(BACKGROUND, BLACK);
 			setColor(BRIGHT_FOREGROUND, WHITE);
@@ -168,28 +173,31 @@ void mechanicalRoom(struct playerData* player) {
 	pressEnter(23);
 
 	start:
-	printMenu(3, 20, 3, "Odejit na mustek", "Odejit do cely", "Zkotrolovat ovladaci panel generatoru");
+	printMenu(3, 20, 3, "Odejit na mustek", "Odejit do navigace", "Zkotrolovat ovladaci panel generatoru");
 
 	choice = numAnswer(1, 3);
 	switch (choice) {
 	//odejit na mustek
 	case 1:
-		if (player->repairedEl) {
-
-		}
-		else {
+		if (!player->repairedEl) {
 			setColor(BRIGHT_FOREGROUND, WHITE);
 			printTextFile(textFile, 15, 0, 20);
 			pressEnter(22);
 			goto start;
 		}
+
+		else {
+			setColor(BRIGHT_FOREGROUND, WHITE);
+			printTextFile(textFile, 24, 0, 20);
+			pressEnter(22);
+			goto start;
+		}
+			
 		break;
 
-	//odejit do cely
+	//odejit do navigace
 	case 2:
-		if (player->repairedEl) {
-
-		}
+		if (player->repairedEl) return;
 		else {
 			setColor(BRIGHT_FOREGROUND, WHITE);
 			printTextFile(textFile, 15, 0, 20);
@@ -208,10 +216,114 @@ void mechanicalRoom(struct playerData* player) {
 		tryAnswer = boolAnswer();
 
 		if (tryAnswer) {
+			//otazka 1
+			setColor(BRIGHT_FOREGROUND, WHITE);
+			printTextFile(textFile, 18, 0, 20);
+			printMenu(3, 22, 3, "Muze pouzit", "Nesmi pouzit", "Musi pouzit");
+			choice = numAnswer(1, 3);
+			if (choice == 2) {
+				setColor(BRIGHT_FOREGROUND, WHITE);
+				printTextFile(textFile, 19, 0, 20);
+				pressEnter(22);
+			}
+			else {
+				setColor(BRIGHT_FOREGROUND, WHITE);
+				printTextFile(textFile, 20, 0, 20);
+				pressEnter(22);
+				goto start;
+			}
 
+			//otazka 2
+			setColor(BRIGHT_FOREGROUND, WHITE);
+			printTextFile(textFile, 21, 0, 20);
+			printMenu(3, 22, 3, "Cervena", "Zluta", "Cerna");
+			choice = numAnswer(1, 3);
+			if (choice == 1) {
+				setColor(BRIGHT_FOREGROUND, WHITE);
+				printTextFile(textFile, 19, 0, 20);
+				pressEnter(22);
+			}
+			else {
+				setColor(BRIGHT_FOREGROUND, WHITE);
+				printTextFile(textFile, 20, 0, 20);
+				pressEnter(22);
+				goto start;
+			}
+
+			//otazka 3
+			setColor(BRIGHT_FOREGROUND, WHITE);
+			printTextFile(textFile, 22, 0, 20);
+			printMenu(3, 22, 3, "Vsechny pracovni vodice", "Pouze ochranny vodic", "Pouze zemnici vodic");
+			choice = numAnswer(1, 3);
+			if (choice == 1) {
+				setColor(BRIGHT_FOREGROUND, WHITE);
+				printTextFile(textFile, 19, 0, 20);
+				pressEnter(22);
+			}
+			else {
+				setColor(BRIGHT_FOREGROUND, WHITE);
+				printTextFile(textFile, 20, 0, 20);
+				pressEnter(22);
+				goto start;
+			}
+
+			player->repairedEl = 1;
+			saveGame(player, sizeof(struct playerData));
+			setColor(BRIGHT_FOREGROUND, WHITE);
+			printTextFile(textFile, 23, 0, 20);
+			pressEnter(22);
+			goto start;
 		}
 		else goto start;
 
+		break;
+	}
+}
+
+void navigationRoom(struct playerData* player) {
+	unsigned int choice;
+
+	start:
+	printMenu(3, 20, 2, "Odejit na mustek", "Zjistit souradnice");
+
+	choice = numAnswer(1, 3);
+	switch (choice) {
+	//odejit na mustek
+	case 1:
+		if ((player->coordinationsA[0] + player->coordinationsA[1] + player->coordinationsA[2]) && (player->coordinationsB[0] + player->coordinationsB[1] + player->coordinationsB[2])) return;
+		else {
+			setColor(BRIGHT_FOREGROUND, WHITE);
+			printTextFile(textFile, 25, 0, 20);
+			pressEnter(22);
+			goto start;
+			break;
+		}
+
+	//zjistit souradnice
+	case 2:
+		srand(time(NULL));
+		int rNum;
+
+		//aktualni souradnice
+		for (int c = 0; c < 3; c++) {
+			rNum = rand() % 20;
+			player->coordinationsA[c] = rNum;
+		}
+
+		//souradnice cile
+		for (int c = 0; c < 3; c++) {
+			rNum = rand() % 20;
+			player->coordinationsB[c] = rNum;
+		}
+		saveGame(player, sizeof(struct playerData));
+
+		//tisk souradnic
+		setColor(BRIGHT_FOREGROUND, WHITE);
+		printTextFile(textFile, 26, 0, 20);
+		printf_s("[%d; %d; %d]", player->coordinationsA[0], player->coordinationsA[1], player->coordinationsA[2]);
+		printTextFile(textFile, 27, 0, 23);
+		printf_s("[%d; %d; %d]", player->coordinationsB[0], player->coordinationsB[1], player->coordinationsB[2]);
+		pressEnter(26);
 		break;
 	}
 }

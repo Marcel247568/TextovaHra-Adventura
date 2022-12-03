@@ -96,15 +96,15 @@ void printInputBox() {
 
 bool boolAnswer() {
 	input:
-	char answer[5];
-	scanf_s("%s", answer, (unsigned int)sizeof(answer));
+	char answer;
+	scanf_s("%c", &answer);
 	while (getchar() != '\n');
-	if (!strcmp(answer, "A") || !strcmp(answer, "Y")) {
+	if (answer == 'a' || answer == 'A') {
 		printInputBox();
 		return 1;
 	}
 
-	else if (!strcmp(answer, "N")) {
+	else if (answer == 'n' || answer == 'N') {
 		printInputBox();
 		return 0;
 	}
