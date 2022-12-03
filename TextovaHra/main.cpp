@@ -8,10 +8,14 @@
 
 using namespace std;
 
-void pressEnter(unsigned int row);
+void gameMenu(struct playerData* player);
 void cryoRoom(struct playerData* player);
+void pressEnter(unsigned int row);
 
 const char* textFile = "../../../data/text.dat";
+const char* nameFile = "../../../data/name.dat";
+const char* mapFile = "../../../data/map.dat";
+
 struct playerData {
 	char name[15];
 	bool key;
@@ -19,14 +23,23 @@ struct playerData {
 
 int main()
 {
-	const char* mapFile = "../../../data/map.dat";
-	const char* nameFile = "../../../data/name.dat";
-
 	struct playerData player;
 
 	setup("Destination Unknown", 100, 30);
 	clearScreen();
 
+	gameMenu(&player);
+	
+	clearScreen();
+	printArtFile(mapFile, 20, 1);
+
+	cryoRoom(&player);
+
+	close();
+	return 0;
+}
+
+void gameMenu(struct playerData* player) {
 	printArtFile(nameFile, 8, 3);
 	printMenu(43, 20, 3, "Nova hra", "Nacist hru", "Konec");
 	unsigned int choice;
@@ -35,29 +48,29 @@ int main()
 	setColor(BACKGROUND, BLACK);
 	setColor(BRIGHT_FOREGROUND, WHITE);
 	eraseViewport(CURSOR_TO_END);
-	
+
 	switch (choice) {
 		//zalozeni nove postavy
-		case 1:
-			printTextFile(textFile, 1, 1, 24);
-			printInputBox();
-			scanf_s("%14s", &player.name, 15);
-			while (getchar() != '\n');
-			printInputBox();
-			player.key = 0;
+	case 1:
+		printTextFile(textFile, 1, 1, 24);
+		printInputBox();
+		scanf_s("%14s", player->name, 15);
+		while (getchar() != '\n');
+		printInputBox();
+		player->key = 0;
 
-			saveGame(&player, sizeof(struct playerData));
-			break;
+		saveGame(player, sizeof(struct playerData));
+		break;
 
 		//nasteni postavy
-		case 2:
-			loadGame(&player, sizeof(struct playerData));
-			break;
-		
+	case 2:
+		loadGame(player, sizeof(struct playerData));
+		break;
+
 		//ukonceni hry
-		case 3:
-			close();
-			break;
+	case 3:
+		close();
+		break;
 	}
 
 	//uvod do pribehu
@@ -67,14 +80,6 @@ int main()
 		printTextFile(textFile, 3, 0, 6);
 		pressEnter(10);
 	}
-	
-	clearScreen();
-	printArtFile(mapFile, 20, 1);
-
-	cryoRoom(&player);
-
-	close();
-	return 0;
 }
 
 void cryoRoom(struct playerData* player) {
