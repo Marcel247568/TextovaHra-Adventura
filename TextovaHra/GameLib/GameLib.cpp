@@ -97,7 +97,7 @@ void printInputBox() {
 bool boolAnswer() {
 	input:
 	char answer;
-	scanf_s("%c", &answer);
+	scanf_s("%c", &answer, 1);
 	while (getchar() != '\n');
 	if (answer == 'a' || answer == 'A') {
 		printInputBox();

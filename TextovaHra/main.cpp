@@ -426,6 +426,10 @@ start:
 			setColor(BRIGHT_FOREGROUND, WHITE);
 			printTextFile(textFile, 35, 0, 20);
 			pressEnter(23);
+			for (int t = 20; t > 0; t--) {
+				printArtFile(mapFile, t, 1);
+				uSleep(10);
+			}
 		}
 		else {
 			setColor(BRIGHT_FOREGROUND, WHITE);
@@ -470,7 +474,7 @@ bool isPrime(unsigned int number) {
 
 	if (!(number % 2) || !(number % 3)) return 0;
 
-	for (int n = 5; n * n <= number; n += 6) {
+	for (unsigned int n = 5; (n * n) <= number; n += 6) {
 		if (!(number % n) || !(number % (n + 2))) return 0;
 	}
 
