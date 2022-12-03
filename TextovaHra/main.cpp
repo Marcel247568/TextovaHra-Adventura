@@ -347,11 +347,12 @@ void navigationRoom(struct playerData* player) {
 
 		//tisk souradnic
 		setColor(BRIGHT_FOREGROUND, WHITE);
-		printTextFile(textFile, 26, 0, 20);
+		printTextFile(textFile, 28, 0 ,20);
+		printTextFile(textFile, 26, 0, 21);
 		printf_s("[%d; %d; %d]", player->coordinationsA[0], player->coordinationsA[1], player->coordinationsA[2]);
-		printTextFile(textFile, 27, 0, 23);
+		printTextFile(textFile, 27, 0, 24);
 		printf_s("[%d; %d; %d]", player->coordinationsB[0], player->coordinationsB[1], player->coordinationsB[2]);
-		pressEnter(26);
+		pressEnter(27);
 		goto start;
 		break;
 	}
