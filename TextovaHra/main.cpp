@@ -13,6 +13,7 @@ void gameMenu(struct playerData* player);
 void cryoRoom(struct playerData* player);
 void mechanicalRoom(struct playerData* player);
 void navigationRoom(struct playerData* player);
+void bridgeRoom(struct playerData* player);
 void pressEnter(unsigned int row);
 
 const char* textFile = "../../../data/text.dat";
@@ -41,6 +42,7 @@ int main()
 	cryoRoom(&player);
 	mechanicalRoom(&player);
 	navigationRoom(&player);
+	bridgeRoom(&player);
 
 	close();
 	return 0;
@@ -128,6 +130,12 @@ void cryoRoom(struct playerData* player) {
 	
 	//skrinka
 	case 3:
+		if (player->key) {
+			setColor(BRIGHT_FOREGROUND, WHITE);
+			printTextFile(textFile, 29, 0, 20);
+			pressEnter(22);
+			goto start;
+		}
 		setColor(BACKGROUND, BLACK);
 		setColor(BRIGHT_FOREGROUND, WHITE);
 		printTextFile(textFile, 8, 0, 20);
@@ -208,6 +216,12 @@ void mechanicalRoom(struct playerData* player) {
 
 	//kontrola ovaldaciho panelu
 	case 3:
+		if (player->repairedEl) {
+			setColor(BRIGHT_FOREGROUND, WHITE);
+			printTextFile(textFile, 29, 0, 20);
+			pressEnter(22);
+			goto start;
+		}
 		setColor(BRIGHT_FOREGROUND, WHITE);
 		printTextFile(textFile, 16, 0, 20);
 		setColor(FOREGROUND, WHITE);
@@ -286,7 +300,7 @@ void navigationRoom(struct playerData* player) {
 	start:
 	printMenu(3, 20, 2, "Odejit na mustek", "Zjistit souradnice");
 
-	choice = numAnswer(1, 3);
+	choice = numAnswer(1, 2);
 	switch (choice) {
 	//odejit na mustek
 	case 1:
@@ -301,21 +315,23 @@ void navigationRoom(struct playerData* player) {
 
 	//zjistit souradnice
 	case 2:
-		srand(time(NULL));
-		int rNum;
+		if (!((player->coordinationsA[0] + player->coordinationsA[1] + player->coordinationsA[2]) && (player->coordinationsB[0] + player->coordinationsB[1] + player->coordinationsB[2]))) {
+			srand(time(NULL));
+			int rNum;
 
-		//aktualni souradnice
-		for (int c = 0; c < 3; c++) {
-			rNum = rand() % 20;
-			player->coordinationsA[c] = rNum;
-		}
+			//aktualni souradnice
+			for (int c = 0; c < 3; c++) {
+				rNum = rand() % 20;
+				player->coordinationsA[c] = rNum;
+			}
 
-		//souradnice cile
-		for (int c = 0; c < 3; c++) {
-			rNum = rand() % 20;
-			player->coordinationsB[c] = rNum;
+			//souradnice cile
+			for (int c = 0; c < 3; c++) {
+				rNum = rand() % 20;
+				player->coordinationsB[c] = rNum;
+			}
+			saveGame(player, sizeof(struct playerData));
 		}
-		saveGame(player, sizeof(struct playerData));
 
 		//tisk souradnic
 		setColor(BRIGHT_FOREGROUND, WHITE);
@@ -324,6 +340,64 @@ void navigationRoom(struct playerData* player) {
 		printTextFile(textFile, 27, 0, 23);
 		printf_s("[%d; %d; %d]", player->coordinationsB[0], player->coordinationsB[1], player->coordinationsB[2]);
 		pressEnter(26);
+		goto start;
+		break;
+	}
+}
+
+void bridgeRoom(struct playerData* player) {
+	unsigned int choice, first, second, third, firstC, secondC, thirdC;
+
+start:
+	printMenu(3, 20, 2, "Zadat souradnice", "Jit se znovu podivat na souradnice");
+
+	choice = numAnswer(1, 2);
+	switch (choice) {
+	case 1:
+		//prvni souradnice
+		setColor(FOREGROUND, WHITE);
+		printTextFile(textFile, 30, 1, 20);
+		printInputBox();
+		first = numAnswer(-20, 20);
+
+		//druha souradnice
+		setColor(FOREGROUND, WHITE);
+		printTextFile(textFile, 31, 1, 20);
+		printInputBox();
+		second = numAnswer(-20, 20);
+
+		//treti souradnice
+		setColor(FOREGROUND, WHITE);
+		printTextFile(textFile, 32, 1, 20);
+		printInputBox();
+		third = numAnswer(-20, 20);
+
+		firstC = player->coordinationsB[0] - player->coordinationsA[0];
+		secondC = player->coordinationsB[1] - player->coordinationsA[1];
+		thirdC = player->coordinationsB[2] - player->coordinationsA[2];
+
+		if (first == firstC && second == secondC && third == thirdC) {
+			clearScreen();
+			printf("konechryyyy");
+		}
+		else {
+			setColor(FOREGROUND, WHITE);
+			printTextFile(textFile, 33, 0, 20);
+			pressEnter(22);
+			goto start;
+		}
+		break;
+
+	//opetovna kontrola souradnic
+	case 2:
+		setColor(BRIGHT_FOREGROUND, WHITE);
+		printTextFile(textFile, 26, 0, 20);
+		printf_s("[%d; %d; %d]", player->coordinationsA[0], player->coordinationsA[1], player->coordinationsA[2]);
+		printTextFile(textFile, 27, 0, 23);
+		printf_s("[%d; %d; %d]", player->coordinationsB[0], player->coordinationsB[1], player->coordinationsB[2]);
+		pressEnter(26);
+		
+		goto start;
 		break;
 	}
 }

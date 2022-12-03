@@ -116,10 +116,10 @@ bool boolAnswer() {
 	}
 }
 
-unsigned int numAnswer(unsigned int from, unsigned int to) {
+int numAnswer(int from, int to) {
 	input:
-	unsigned int answer;
-	scanf_s("%u", &answer);
+	int answer;
+	scanf_s("%d", &answer);
 	while (getchar() != '\n');
 	if (answer >= from && answer <= to) {
 		printInputBox();

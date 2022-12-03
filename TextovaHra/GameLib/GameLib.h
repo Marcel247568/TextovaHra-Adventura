@@ -15,7 +15,7 @@ void printTextFile(const char* file, unsigned int part, bool instant, unsigned i
 
 void uSleep(unsigned int ms);
 bool boolAnswer();
-unsigned int numAnswer(unsigned int from, unsigned int to);
+int numAnswer(int from, int to);
 
 void saveGame(void* playerData, unsigned int size);
 void loadGame(void* playerData, unsigned int size);
