@@ -19,7 +19,7 @@ void uSleep(unsigned int ms) {
 	#ifdef _WIN32
 	Sleep(ms);
 	#else
-	sleep(ms/1000);
+	usleep(ms*1000);
 	#endif
 }
 

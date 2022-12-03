@@ -10,6 +10,7 @@ using namespace std;
 
 void gameMenu(struct playerData* player);
 void cryoRoom(struct playerData* player);
+void mechanicalRoom(struct playerData* player);
 void pressEnter(unsigned int row);
 
 const char* textFile = "../../../data/text.dat";
@@ -19,6 +20,7 @@ const char* mapFile = "../../../data/map.dat";
 struct playerData {
 	char name[15];
 	bool key;
+	bool repairedEl;
 };
 
 int main()
@@ -27,13 +29,13 @@ int main()
 
 	setup("Destination Unknown", 100, 30);
 	clearScreen();
-
 	gameMenu(&player);
 	
 	clearScreen();
 	printArtFile(mapFile, 20, 1);
 
 	cryoRoom(&player);
+	mechanicalRoom(&player);
 
 	close();
 	return 0;
@@ -50,7 +52,7 @@ void gameMenu(struct playerData* player) {
 	eraseViewport(CURSOR_TO_END);
 
 	switch (choice) {
-		//zalozeni nove postavy
+	//zalozeni nove postavy
 	case 1:
 		printTextFile(textFile, 1, 1, 24);
 		printInputBox();
@@ -58,16 +60,17 @@ void gameMenu(struct playerData* player) {
 		while (getchar() != '\n');
 		printInputBox();
 		player->key = 0;
+		player->repairedEl = 0;
 
 		saveGame(player, sizeof(struct playerData));
 		break;
 
-		//nasteni postavy
+	//nasteni postavy
 	case 2:
 		loadGame(player, sizeof(struct playerData));
 		break;
 
-		//ukonceni hry
+	//ukonceni hry
 	case 3:
 		close();
 		break;
@@ -89,11 +92,11 @@ void cryoRoom(struct playerData* player) {
 	pressEnter(24);
 
 	start:
-	printMenu(3, 20, 3, "Odejit", "Podivat se na stul", "Podivat se na skrinku");
+	printMenu(3, 20, 3, "Odejit do strojovny", "Podivat se na stul", "Podivat se na skrinku");
 
-	//odchod
 	choice = numAnswer(1, 3);
 	switch (choice) {
+	//odchod
 	case 1:
 		if (player->key) {
 			setColor(BACKGROUND, BLACK);
@@ -149,10 +152,66 @@ void cryoRoom(struct playerData* player) {
 		}
 		else {
 			setColor(BRIGHT_FOREGROUND, WHITE);
-			printTextFile(textFile, 12, 1, 20);
+			printTextFile(textFile, 12, 0, 20);
 			pressEnter(22);
 			goto start;
 		}
+		break;
+	}
+}
+
+void mechanicalRoom(struct playerData* player) {
+	unsigned int choice;
+	bool tryAnswer;
+	setColor(BRIGHT_FOREGROUND, WHITE);
+	printTextFile(textFile, 14, 0, 20);
+	pressEnter(23);
+
+	start:
+	printMenu(3, 20, 3, "Odejit na mustek", "Odejit do cely", "Zkotrolovat ovladaci panel generatoru");
+
+	choice = numAnswer(1, 3);
+	switch (choice) {
+	//odejit na mustek
+	case 1:
+		if (player->repairedEl) {
+
+		}
+		else {
+			setColor(BRIGHT_FOREGROUND, WHITE);
+			printTextFile(textFile, 15, 0, 20);
+			pressEnter(22);
+			goto start;
+		}
+		break;
+
+	//odejit do cely
+	case 2:
+		if (player->repairedEl) {
+
+		}
+		else {
+			setColor(BRIGHT_FOREGROUND, WHITE);
+			printTextFile(textFile, 15, 0, 20);
+			pressEnter(22);
+			goto start;
+		}
+		break;
+
+	//kontrola ovaldaciho panelu
+	case 3:
+		setColor(BRIGHT_FOREGROUND, WHITE);
+		printTextFile(textFile, 16, 0, 20);
+		setColor(FOREGROUND, WHITE);
+		printTextFile(textFile, 17, 1, 23);
+		printInputBox();
+		tryAnswer = boolAnswer();
+
+		if (tryAnswer) {
+
+		}
+		else goto start;
+
 		break;
 	}
 }
