@@ -15,6 +15,8 @@ void mechanicalRoom(struct playerData* player);
 void navigationRoom(struct playerData* player);
 void bridgeRoom(struct playerData* player);
 void pressEnter(unsigned int row);
+unsigned int nextPrime(unsigned int number);
+bool isPrime(unsigned int number);
 
 const char* textFile = "../../../data/text.dat";
 const char* nameFile = "../../../data/name.dat";
@@ -26,6 +28,9 @@ struct playerData {
 	bool repairedEl;
 	int coordinationsA[3];
 	int coordinationsB[3];
+	bool visitedMech;
+	bool visitedNav;
+	bool visitedBridge;
 };
 
 int main()
@@ -39,9 +44,9 @@ int main()
 	clearScreen();
 	printArtFile(mapFile, 20, 1);
 
-	cryoRoom(&player);
-	mechanicalRoom(&player);
-	navigationRoom(&player);
+	if (!player.visitedMech)cryoRoom(&player);
+	if (!player.visitedNav)mechanicalRoom(&player);
+	if (!player.visitedBridge)navigationRoom(&player);
 	bridgeRoom(&player);
 
 	close();
@@ -72,6 +77,9 @@ void gameMenu(struct playerData* player) {
 			player->coordinationsA[s] = 0;
 			player->coordinationsB[s] = 0;
 		}
+		player->visitedMech = 0;
+		player->visitedNav = 0;
+		player->visitedBridge = 0;
 
 		saveGame(player, sizeof(struct playerData));
 		break;
@@ -174,6 +182,8 @@ void cryoRoom(struct playerData* player) {
 }
 
 void mechanicalRoom(struct playerData* player) {
+	player->visitedMech = 1;
+	saveGame(player, sizeof(struct playerData));
 	unsigned int choice;
 	bool tryAnswer;
 	setColor(BRIGHT_FOREGROUND, WHITE);
@@ -295,6 +305,8 @@ void mechanicalRoom(struct playerData* player) {
 }
 
 void navigationRoom(struct playerData* player) {
+	player->visitedNav = 1;
+	saveGame(player, sizeof(struct playerData));
 	unsigned int choice;
 
 	start:
@@ -346,49 +358,83 @@ void navigationRoom(struct playerData* player) {
 }
 
 void bridgeRoom(struct playerData* player) {
-	unsigned int choice, first, second, third, firstC, secondC, thirdC;
+	player->visitedBridge = 1;
+	saveGame(player, sizeof(struct playerData));
+	unsigned int choice, firstC, secondC, thirdC, firstCC, secondCC, thirdCC, firstP, secondP, thirdP;
 
 start:
 	printMenu(3, 20, 2, "Zadat souradnice", "Jit se znovu podivat na souradnice");
 
 	choice = numAnswer(1, 2);
 	switch (choice) {
+	//zadani souradnic
 	case 1:
 		//prvni souradnice
 		setColor(FOREGROUND, WHITE);
 		printTextFile(textFile, 30, 1, 20);
 		printInputBox();
-		first = numAnswer(-20, 20);
+		firstC = numAnswer(-20, 20);
 
 		//druha souradnice
 		setColor(FOREGROUND, WHITE);
 		printTextFile(textFile, 31, 1, 20);
 		printInputBox();
-		second = numAnswer(-20, 20);
+		secondC = numAnswer(-20, 20);
 
 		//treti souradnice
 		setColor(FOREGROUND, WHITE);
 		printTextFile(textFile, 32, 1, 20);
 		printInputBox();
-		third = numAnswer(-20, 20);
+		thirdC = numAnswer(-20, 20);
 
-		firstC = player->coordinationsB[0] - player->coordinationsA[0];
-		secondC = player->coordinationsB[1] - player->coordinationsA[1];
-		thirdC = player->coordinationsB[2] - player->coordinationsA[2];
+		firstCC = player->coordinationsB[0] - player->coordinationsA[0];
+		secondCC = player->coordinationsB[1] - player->coordinationsA[1];
+		thirdCC = player->coordinationsB[2] - player->coordinationsA[2];
 
-		if (first == firstC && second == secondC && third == thirdC) {
-			clearScreen();
-			printf("konechryyyy");
+		//konec hry
+		if (firstC == firstCC && secondC == secondCC && thirdC == thirdCC) {
+			srand(time(NULL));
+			int rNum = rand() % 50;
+			setColor(BRIGHT_FOREGROUND, WHITE);
+			printTextFile(textFile, 34, 0, 20);
+			printf_s("%u", rNum);
+
+			//zadani prvocisel
+			setColor(FOREGROUND, WHITE);
+			printTextFile(textFile, 36, 1, 23);
+			printInputBox();
+			firstP = numAnswer(0, 100);
+			setColor(FOREGROUND, WHITE);
+			printTextFile(textFile, 37, 1, 23);
+			printInputBox();
+			secondP = numAnswer(0, 100);
+			setColor(FOREGROUND, WHITE);
+			printTextFile(textFile, 38, 1, 23);
+			printInputBox();
+			thirdP = numAnswer(0, 100);
+
+			//kontrola prvocisel
+			if (firstP != nextPrime(rNum) || secondP != nextPrime(firstP) || thirdP != nextPrime(secondP)) {
+				setColor(BRIGHT_FOREGROUND, WHITE);
+				printTextFile(textFile, 39, 0, 20);
+				pressEnter(22);
+				goto start;
+			}
+
+			//uspesne ukonceno
+			setColor(BRIGHT_FOREGROUND, WHITE);
+			printTextFile(textFile, 35, 0, 20);
+			pressEnter(23);
 		}
 		else {
-			setColor(FOREGROUND, WHITE);
+			setColor(BRIGHT_FOREGROUND, WHITE);
 			printTextFile(textFile, 33, 0, 20);
 			pressEnter(22);
 			goto start;
 		}
 		break;
 
-	//opetovna kontrola souradnic
+	//opetovne zobrazeni souradnic
 	case 2:
 		setColor(BRIGHT_FOREGROUND, WHITE);
 		printTextFile(textFile, 26, 0, 20);
@@ -408,4 +454,24 @@ void pressEnter(unsigned int row) {
 	printTextFile(textFile, 4, 1, row);
 	while (getchar() != '\n');
 	hideCursor(0);
+}
+
+unsigned int nextPrime(unsigned int number) {
+	if (number < 2) return 2;
+	for (unsigned int p = number + 1;; p++) {
+		if(isPrime(p)) return p;
+	}
+}
+
+bool isPrime(unsigned int number) {
+	if (number < 2) return 0;
+	if (number == 2 || number == 3) return 1;
+
+	if (!(number % 2) || !(number % 3)) return 0;
+
+	for (int n = 5; n * n <= number; n += 6) {
+		if (!(number % n) || !(number % (n + 2))) return 0;
+	}
+
+	return 1;
 }
