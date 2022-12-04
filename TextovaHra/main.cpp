@@ -108,7 +108,7 @@ void cryoRoom(struct playerData* player) {
 	unsigned int choice, first, second, third;
 	setColor(BRIGHT_FOREGROUND, WHITE);
 	printTextFile(textFile, 5, 0, 20);
-	pressEnter(24);
+	pressEnter(25);
 
 	start:
 	printMenu(3, 20, 3, "Odejit do strojovny", "Podivat se na stul", "Podivat se na skrinku");
@@ -430,6 +430,11 @@ start:
 				printArtFile(mapFile, t, 1);
 				uSleep(10);
 			}
+			clearScreen();
+			printArtFile(nameFile, 8, 3);
+			printTextFile(textFile, 40, 1, 17);
+			pressEnter(20);
+			close();
 		}
 		else {
 			setColor(BRIGHT_FOREGROUND, WHITE);
